@@ -109,8 +109,8 @@ def draw_board(board):
             else:
                 pygame.draw.rect(screen, GRAY, rect)
                 if cell.is_flagged:
-                    pygame.draw.line(screen, BLACK, rect.topleft, rect.bottomright, 3)
-                    pygame.draw.line(screen, BLACK, rect.topright, rect.bottomleft, 3)
+                    # отрисовываем изображение флага
+                    screen.blit(flag_image, rect.topleft)  # Позиция верхнего левого угла клетки
 
             # Рисуем кант
             pygame.draw.rect(screen, BLACK, rect, 1)
