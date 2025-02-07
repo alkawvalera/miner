@@ -31,7 +31,7 @@ def load_image(name, colorkey=None):
     return image
 
 
-landmine = load_image('landmine.png')
+
 
 
 # Класс для клетки
@@ -144,7 +144,7 @@ def draw_board(board):
 
 # Отображение окон окончания игры
 def display_end_screen(victory):
-    landmine1 = pygame.transform.scale(landmine, (100, 100))
+
     screen.fill(BLACK)
     font = pygame.font.Font(None, 74)
     text = font.render("Победа!" if victory else "Проигрыш!", True, WHITE)
