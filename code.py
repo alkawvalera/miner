@@ -1,5 +1,7 @@
 import pygame
 import random
+import os
+import sys
 
 # Константы
 WIDTH, HEIGHT = 400, 400
@@ -17,6 +19,19 @@ RED = (255, 0, 0)
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Сапер")
+
+
+def load_image(name, colorkey=None):
+    fullname = os.path.join('data', name)
+    # если файл не существует, то выходим
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
+    return image
+
+
+landmine = load_image('landmine.png')
 
 
 # Класс для клетки
@@ -91,6 +106,11 @@ def open_area(board, x, y):
                     open_area(board, x + dx, y + dy)
 
 
+# Загрузка изображения флага
+flag_image = pygame.image.load('data/flag.png')
+flag_image = pygame.transform.scale(flag_image, (CELL_SIZE, CELL_SIZE))  # Измените размер по необходимости
+
+
 # Отрисовка игрового поля
 def draw_board(board):
     for y in range(GRID_SIZE):
@@ -109,8 +129,8 @@ def draw_board(board):
             else:
                 pygame.draw.rect(screen, GRAY, rect)
                 if cell.is_flagged:
-                    pygame.draw.line(screen, BLACK, rect.topleft, rect.bottomright, 3)
-                    pygame.draw.line(screen, BLACK, rect.topright, rect.bottomleft, 3)
+                    # отрисовываем изображение флага
+                    screen.blit(flag_image, rect.topleft)  # Позиция верхнего левого угла клетки
 
             # Рисуем кант
             pygame.draw.rect(screen, BLACK, rect, 1)
@@ -124,6 +144,7 @@ def draw_board(board):
 
 # Отображение окон окончания игры
 def display_end_screen(victory):
+    landmine1 = pygame.transform.scale(landmine, (100, 100))
     screen.fill(BLACK)
     font = pygame.font.Font(None, 74)
     text = font.render("Победа!" if victory else "Проигрыш!", True, WHITE)
@@ -172,7 +193,7 @@ def main():
 
                 elif exit_button_active and exit_button.collidepoint((mouse_x, mouse_y)):
                     running = False  # Выход из игры
-                elif exit_button_active:                # Нажатие в каком-либо месте просто игнорируется.
+                elif exit_button_active:  # Нажатие в каком-либо месте просто игнорируется
                     continue
 
             if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
